@@ -1,0 +1,136 @@
+//链表的基本操作
+//学习使用，若对代码有疑问，或有相应指教请+Q1808881488
+#include <stdio.h>
+#include <malloc.h>
+typedef struct Node{
+	int data;
+	struct Node *next;
+}Node;
+
+Node *first;
+//头插法创建链表 
+void HeadCreatList(); 
+//尾插法创建链表
+void RearCreatList(); 
+//插入节点
+int Insert(int i, int x);
+//删除节点
+int Delete(int i);
+//按值查找
+int Locate(int x);
+//按位查找
+int Get(int i);
+//遍历链表
+void Print();
+ 
+int main(){
+	RearCreatList();
+	Print();
+	Delete(4);
+	Print();
+	Insert(4, 100);
+	Print();
+	printf("%d\n", Locate(7));
+	printf("%d\n", Get(4));
+}
+
+
+void HeadCreatList(){
+	first = (Node*)malloc(sizeof(Node));
+	first->next = NULL;
+	Node *s = NULL;
+	for(int i = 1; i <= 10; i++){
+		s = (Node*)malloc(sizeof(Node));
+		s->data = i;
+		s->next = first->next;
+		first->next = s;
+	}
+}
+
+void RearCreatList(){
+	first = (Node*)malloc(sizeof(Node));
+	first->next = NULL;
+	Node *s = NULL, *r = first;
+	for(int i = 1; i <= 10; i++){
+		s = (Node*)malloc(sizeof(Node));
+		s->data = i;
+		r->next = s;
+		r = s;	
+	}
+	r->next = NULL;
+}
+int Insert(int i, int x){
+	Node *p = first->next;
+	Node *s = NULL;
+	int count = 1;
+	while(p!=NULL&&count<i-1){
+		p = p->next;
+		count++;
+	}
+	if(p == NULL){
+		printf("位置错误。插入失败\n");
+		return 0;
+	} else{
+		s = (Node*)malloc(sizeof(Node));
+		s->data = x;
+		s->next = p->next;
+		p->next = s;
+		return 1;
+	}
+}
+
+int Locate(int x){
+	Node *p = first->next;
+	int count = 1;
+	while(p!=NULL){
+		if(p->data==x){
+			return count;
+		} else{
+			p = p->next;
+			count++;
+		}
+	}
+	printf("链表中未有该值\n"); 
+	return 0;
+}
+
+int Get(int i){
+	int count = 1;
+	Node *p = first->next;
+	while(p!=NULL&&count<i){
+		p = p->next;
+		count++;
+	}
+	if(p==NULL){
+		printf("位置错误,按位查找失败\n");
+		return 0;
+	}
+	
+	return p->data;
+}
+
+int Delete(int i){
+	int count = 1;
+	Node *p = first->next, *q = NULL;
+	while(p!=NULL&&count<i-1){
+		p = p->next;
+		count++;
+	}
+	if(p==NULL&&p->next==NULL){
+		printf("位置错误，删除失败\n");
+		return 0;
+	}
+	q = p->next;
+	p->next = q->next;
+	free(q);
+	return 1;
+}
+
+void Print(){
+	Node *p = first->next;
+	while(p!=NULL){
+		printf("%d ", p->data);
+		p = p->next; 
+	}
+	printf("\n");
+}
